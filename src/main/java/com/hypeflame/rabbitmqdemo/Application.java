@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.hypeflame.rabbitmqdemo;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -9,11 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class MessagingRabbitmqApplication {
+public class Application {
 
   static final String topicExchangeName = "spring-boot-exchange";
 
   static final String queueName = "spring-boot";
+
   @Bean
   Queue queue() {
     Queue queue = new Queue(queueName, false);
@@ -49,7 +50,7 @@ public class MessagingRabbitmqApplication {
   }
 
   public static void main(String[] args) throws InterruptedException {
-    SpringApplication.run(MessagingRabbitmqApplication.class, args).close();
+    SpringApplication.run(Application.class, args);
   }
 
 }
