@@ -6,7 +6,9 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class Application {
@@ -36,7 +38,7 @@ public class Application {
   SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
                                            MessageListenerAdapter listenerAdapter) {
     SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-    container.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+    container.setAcknowledgeMode(AcknowledgeMode.AUTO);
     container.setConnectionFactory(connectionFactory);
     container.setQueueNames(queueName);
     container.setMessageListener(listenerAdapter);
@@ -47,6 +49,13 @@ public class Application {
   MessageListenerAdapter listenerAdapter(Receiver receiver) {
     MessageListenerAdapter receiveMessage = new MessageListenerAdapter(receiver, "receiveMessage");
     return receiveMessage;
+  }
+
+  @Bean
+  public RestTemplate restTemplate(RestTemplateBuilder builder) {
+    return builder
+            .rootUri("http://localhost:8081")
+            .build();
   }
 
   public static void main(String[] args) throws InterruptedException {
