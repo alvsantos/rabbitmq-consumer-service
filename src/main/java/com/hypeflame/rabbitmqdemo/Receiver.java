@@ -15,15 +15,17 @@ public class Receiver {
   private AtomicInteger received = new AtomicInteger();
   private final RestTemplate restTemplate;
 
-  public void receiveMessage(byte[] bytes) {
+  public Boolean receiveMessage(byte[] bytes) {
     String body = new String(bytes);
     int i = received.incrementAndGet();
     System.out.println("Received <" + i + "> Body: " + body);
 
     try {
       restTemplate.postForEntity("/v1/processed", body, String.class);
+      return Boolean.TRUE;
     } catch (Exception ex) {
       log.error(ex.getMessage());
+      return Boolean.FALSE;
     }
 
   }
